@@ -195,6 +195,7 @@ export 'package:maplibre_platform_interface/maplibre_platform_interface.dart'
         StyleGlobalState,
         StyleImage,
         StyleImageOptions,
+        StyleImageResolver,
         StyleLayer,
         StyleLayerFeatureCallback,
         StyleLayerFeatureEvent,

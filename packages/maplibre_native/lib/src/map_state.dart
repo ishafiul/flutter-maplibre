@@ -132,6 +132,31 @@ class MapLibreMapStateNative extends MapLibreMapState {
     }
   }
 
+  /// Runs [MapLibreMap.resolveStyleImage], then calls
+  /// [MapLibreMap.onStyleImageMissing] if the style still lacks the image.
+  Future<void> _onStyleImageMissing(String id) async {
+    final resolve = effectiveWidget.resolveStyleImage;
+    final style = this.style;
+    if (resolve != null && style != null) {
+      try {
+        await resolve(style, id);
+      } on Object catch (error, stack) {
+        FlutterError.reportError(
+          FlutterErrorDetails(
+            exception: error,
+            stack: stack,
+            library: 'maplibre_native',
+            context: ErrorDescription('while resolving the style image "$id"'),
+          ),
+        );
+      }
+      if (_disposed || await style.hasImage(id)) return;
+    }
+    effectiveWidget.onStyleImageMissing?.call(
+      MapEventStyleImageMissing(id: id),
+    );
+  }
+
   /// Submits the options, initial camera, and style of a new [map].
   Future<void> _setUp(mln.MapHandle map) async {
     _map = map;
@@ -308,12 +333,10 @@ class MapLibreMapStateNative extends MapLibreMapState {
           const MapEventLoadingFinished(),
         );
       case mln.RuntimeEventType.mapStyleImageMissing:
-        final onStyleImageMissing = effectiveWidget.onStyleImageMissing;
-        if (onStyleImageMissing == null) return;
         if (event.payload case mln.RuntimeEventPayloadStyleImage(
           :final value,
         )) {
-          onStyleImageMissing(MapEventStyleImageMissing(id: value.imageId));
+          unawaited(_onStyleImageMissing(value.imageId));
         }
       case mln.RuntimeEventType.mapTileAction:
         final onTile = effectiveWidget.onTile;

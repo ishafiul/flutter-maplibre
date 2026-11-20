@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -557,3 +558,12 @@ final class StyleImage {
   /// How the map draws the image.
   final StyleImageOptions options;
 }
+
+/// Resolves the image [id] that a layer of [style] uses but the style
+/// doesn't have, usually by adding it with [StyleController.addImage].
+///
+/// See [MapLibreMap.resolveStyleImage].
+typedef StyleImageResolver = FutureOr<void> Function(
+  StyleController style,
+  String id,
+);

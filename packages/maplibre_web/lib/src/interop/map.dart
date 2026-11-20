@@ -118,6 +118,12 @@ extension type JsMap._(Camera _) implements Camera {
   @JS('updateImage')
   external void updateStyleImage(String id, JSObject image);
 
+  /// Sets the function that the map awaits for a missing image before it
+  /// gives up on it, or removes it with null.
+  ///
+  /// https://maplibre.org/maplibre-gl-js/docs/API/classes/Map/#setmissingstyleimageresolver
+  external void setMissingStyleImageResolver(JSFunction? resolver);
+
   /// Update the min zoom level.
   external void setMinZoom(double? minZoom);
 

@@ -41,7 +41,7 @@ extension MapLibreMapExt on MapLibreMap {
       (onLoadingFinished != null
           ? mln.RuntimeEventFlag.mapLoadingFinished
           : mln.RuntimeEventFlag.none) |
-      (onStyleImageMissing != null
+      (onStyleImageMissing != null || resolveStyleImage != null
           ? mln.RuntimeEventFlag.mapStyleImageMissing
           : mln.RuntimeEventFlag.none) |
       (onTile != null

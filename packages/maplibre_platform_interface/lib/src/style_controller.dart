@@ -478,8 +478,9 @@ final class StyleImageOptions {
   final ImageTextFit? textFitHeight;
 
   /// Whether the map keeps the image while no layer of the style uses it.
-  /// Off, the map may remove an image once the style stops using it, and
-  /// reports it as missing when a layer needs it again.
+  /// Off, the map may remove an image that was added after the map reported
+  /// it missing, see [MapLibreMap.onStyleImageMissing], once no layer uses
+  /// it.
   ///
   /// Not on web, where the map always keeps its images.
   final bool keepUnused;

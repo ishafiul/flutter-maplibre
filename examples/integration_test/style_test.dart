@@ -671,7 +671,7 @@ void runTests() {
       );
     });
 
-    testWidgets('reads images back and updates their pixels', (tester) async {
+    testWidgets('reads images back', (tester) async {
       final map = await pumpMap(tester, options: offlineOptions());
       final red = await _solidImage(const Color(0xFFFF0000));
       addTearDown(red.dispose);
@@ -717,7 +717,17 @@ void runTests() {
       final half = (await map.style.getImage('half'))!;
       expect(half.pixels[0], inInclusiveRange(253, 255));
       expect(half.pixels.sublist(1, 4), [0, 0, 128]);
+    });
 
+    testWidgets('updates the pixels of an image', (tester) async {
+      final map = await pumpMap(tester, options: offlineOptions());
+      final red = await _solidImage(const Color(0xFFFF0000));
+      addTearDown(red.dispose);
+      await map.style.addImageFromUiImage(
+        id: 'square',
+        image: red,
+        pixelRatio: 2,
+      );
       await map.style.sources.add(
         GeoJsonSource.data(id: 'src', data: _pointData()),
       );
@@ -740,7 +750,7 @@ void runTests() {
       final updated = (await map.style.getImage('square'))!;
       expect(updated.pixels.sublist(0, 4), [0, 255, 0, 255]);
       expect(updated.pixelRatio, 2);
-      expect(updated.options, image.options);
+      expect(updated.options, const StyleImageOptions());
       if (!kIsWeb) await map.waitForColorAtCenter('green', 1);
 
       final blue = await _solidImage(const Color(0xFF0000FF));

@@ -193,6 +193,7 @@ export 'package:maplibre_platform_interface/maplibre_platform_interface.dart'
         StyleController,
         StyleEnum,
         StyleGlobalState,
+        StyleImage,
         StyleImageOptions,
         StyleLayer,
         StyleLayerFeatureCallback,
